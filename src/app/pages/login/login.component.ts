@@ -36,10 +36,13 @@ export class LoginComponent {
   onLogin(): void {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        console.log({ response });
-        //just POC, not a real implementation (in real world, we should use a token)
-        this.authService.setToken(response.data.emailId);
-        this.router.navigate([routePaths.dashboard]);
+        if (response.result) {
+          //just POC, not a real implementation (in real world, we should use a token)
+          this.authService.setToken(response.data.emailId);
+          this.router.navigate([routePaths.dashboard]);
+        } else {
+          alert(response.message);
+        }
       },
       error: (err) => {
         console.error('Login failed', err);
