@@ -1,0 +1,9 @@
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="max-w-screen-sm mx-auto pt-32">
+<app-input [control]="loginForm.controls.username" id="username" label="Username"></app-input>
+<app-input [control]="loginForm.controls.password" id="password" label="Password"></app-input>
+<button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary w-full mt-3">Submit</button>
+</form>
+
+
+
+

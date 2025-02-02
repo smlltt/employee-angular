@@ -1,0 +1,8 @@
+<div class="flex flex-col py-2">
+    <label [for]="id" class="label-text">{{ label }}</label> 
+    <input type="text" [formControl]="control" class="input" [placeholder]="id"  [id]="id"/>
+    @if (control.errors && control.touched && control.dirty) {
+      @for(error of objectKeys(control.errors) ; track error) {
+        <p class="text-red-400">{{ errorMessages[error]  }}</p>}
+      }
+</div>
