@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
+import { routePaths } from '../../app.routes';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css',
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+  routePaths = routePaths;
+  authService = inject(AuthService);
+
+  onLogout() {
+    this.authService.logout();
+  }
+}
