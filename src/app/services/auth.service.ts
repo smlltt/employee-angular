@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { loginUrl } from '../../api';
 import { routePaths } from '../app.routes';
-import { LoginApiResponse } from '../../api/types';
+import { ILoginApiResponse } from '../../api/types';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class AuthService {
     username,
     password,
   }: Partial<{ username: string | null; password: string | null }>) {
-    return this.http.post<LoginApiResponse>(loginUrl, { username, password });
+    return this.http.post<ILoginApiResponse>(loginUrl, { username, password });
   }
   setToken(token: string): void {
     this.token = token;

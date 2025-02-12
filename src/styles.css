@@ -1,18 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, dracula;
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .btn {
     @apply rounded-full;
-   
   }
 
-
 .input {
-  @apply bg-zinc-800;
+  @apply bg-zinc-900;
+}  
+
+.table {
+  :where(tbody tr:not(:last-child), tbody tr:first-child:last-child) {
+    @apply border-none
+  }
 }
