@@ -1,0 +1,67 @@
+
+<form [formGroup]="searchForm" (ngSubmit)="onSearchWord()">
+    <div class="flex gap-3 items-center flex-wrap">
+    <app-input [control]="searchForm.controls.categoryName" id="categoryName" label="Category"></app-input>
+    <app-input [control]="searchForm.controls.productName" id="productName" label="Product Name"></app-input>
+    <button type="submit" class="btn btn-primary mt-4">Search</button>
+    </div>
+
+   
+</form>
+<div class="overflow-x-auto">
+    <table class="table">
+      <!-- head -->
+      <thead >
+        <tr>
+          <th>
+         
+          </th>
+          <th (click)="onSort('productId')">Product Id</th>
+          <th (click)="onSort('productName')">Product Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th></th>
+        </tr>
+      </thead>
+  <tbody >
+<div class="h-3"></div>
+        @for (item of products; track item.productId) {
+            <tr class="hover:bg-green-100">
+             <td class="w-1/12">
+                <input type="checkbox"  />
+             </td>
+                
+              
+                <td class="w-1/4 " >{{item.productId}}</td>
+                <td class="w-1/4">{{item.productName}}</td>
+                <td class="w-1/4">{{item.category}}</td>
+                <td class="w-1/4">{{item.price}}</td>
+                </tr>
+          
+          }
+        
+ 
+  </tbody>
+      <!-- foot -->
+      <!-- <tfoot> -->
+   
+      <!-- </tfoot> -->
+    </table>
+
+  </div>
+  <div class="flex justify-between items-center absolute bottom-3">
+    <div>
+      <label for="pageSize">Page Size:</label>
+      <select id="pageSize" [(ngModel)]="pageSize" (change)="onSearch()" >
+        @for (size of [5, 10, 20, 50]; track size) {
+            <option [value]="size">{{ size }}</option>
+          }
+      </select>
+    </div>
+  
+    <div class="flex gap-2">
+      <button class="btn btn-neutral" (click)="previousPage()" [disabled]="pageNumber === 1">Previous</button>
+      <span>Page {{pageNumber}} of {{totalPages}} </span>
+      <button class="btn btn-neutral" (click)="nextPage()" [disabled]="pageNumber === totalPages">Next</button>
+    </div>
+  </div>
