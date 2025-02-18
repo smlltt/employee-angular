@@ -11,6 +11,8 @@ import { InputComponent } from '../../components/input/input.component';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeStoreService } from '../../services/employeeStore.service';
 import { CommonModule, NgClass } from '@angular/common';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-employee',
@@ -20,18 +22,21 @@ import { CommonModule, NgClass } from '@angular/common';
     InputComponent,
     CommonModule,
     NgClass,
+    ModalComponent,
   ],
   templateUrl: './employee.component.html',
 })
 export class EmployeeComponent implements OnInit {
   masterService = inject(MasterService);
   employeeService = inject(EmployeeService);
+  toastService = inject(ToastService);
   employeeStoreService = inject(EmployeeStoreService);
   parentDeptList: IParentDept[] = [];
   childDeptList: IChildDept[] = [];
   parentDeptSelected: undefined | string;
   employees: IEmployeeData[] = [];
   addSectionShown: boolean = false;
+  employeeToBeDeleted: number | undefined;
 
   employeeForm = new FormGroup({
     parentDept: new FormControl('', [Validators.required]),
@@ -68,7 +73,9 @@ export class EmployeeComponent implements OnInit {
     delete payload.email;
     delete payload.parentDept;
     delete payload.childDept;
-    this.employeeStoreService.addEmployee(payload);
+    this.employeeStoreService.addEmployee(payload, () => {
+      this.employeeForm.reset();
+    });
   }
 
   onParentDeptChange(value: string) {
@@ -84,5 +91,16 @@ export class EmployeeComponent implements OnInit {
 
   toggleAddSectionDisplay(value: boolean) {
     this.addSectionShown = value;
+  }
+
+  setEmployeeToBeDeleted(id: number | undefined) {
+    this.employeeToBeDeleted = id;
+  }
+
+  deleteEmployee() {
+    this.employeeToBeDeleted &&
+      this.employeeStoreService.deleteEmployee(this.employeeToBeDeleted, () => {
+        this.setEmployeeToBeDeleted(undefined);
+      });
   }
 }

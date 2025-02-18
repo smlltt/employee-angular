@@ -1,3 +1,9 @@
+<app-modal [open]="!!employeeToBeDeleted" (onConfirmEvent)="deleteEmployee()" (onDismissEvent)="setEmployeeToBeDeleted(undefined)">
+<div class="gap-2 flex flex-col pb-4">
+  <h2 class="text-2xl">Delete employee {{employeeToBeDeleted}}</h2>
+  <p>Are you sure you want to proceed?</p>
+</div>
+</app-modal>
 <div class="grid grid-cols-3 gap-2">
 <div [ngClass]="addSectionShown ? 'col-span-2' : 'col-span-3'">
   <div class="flex justify-between items-center bg-slate-900 p-3">
@@ -9,19 +15,23 @@
       <!-- head -->
       <thead>
         <tr>
+          <th>Id</th>
           <th>Name</th>
           <th>Phone</th>
           <th>Email</th>
           <th>Dept</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         @for (employee of (employees$ | async); track employee.emailId) {
           <tr>
+            <th> {{ employee.employeeId }}</th>
             <th> {{ employee.employeeName }}</th>
             <th> {{ employee.contactNo }}</th>
             <th> {{ employee.emailId }}</th>
             <th> {{ employee.deptId }}</th>
+            <th> <button class="btn btn-error" (click)="setEmployeeToBeDeleted(employee.employeeId)">Delete</button></th>
           </tr>
         }
       </tbody>
