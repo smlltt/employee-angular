@@ -10,7 +10,6 @@ export class AuthGuard implements CanActivate {
   authService = inject(AuthService);
   router = inject(Router);
   canActivate(): boolean {
-    console.log('test');
     if (this.authService.isAuthenticated()) {
       return true;
     } else {
