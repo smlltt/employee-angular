@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { IEmployeeData } from '../../api/types';
 import {
   createEmployee as createEmployeeEnpoint,
+  deleteEmployeeUrl,
   employeesUrl,
 } from '../../api';
 
@@ -16,5 +17,8 @@ export class EmployeeService {
   }
   getEmployees() {
     return this.http.get<IEmployeeData[]>(employeesUrl);
+  }
+  deleteEmployee(id: number) {
+    return this.http.delete(deleteEmployeeUrl(id));
   }
 }

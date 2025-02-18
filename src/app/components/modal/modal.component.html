@@ -1,0 +1,11 @@
+<dialog class="modal" [ngClass]="{'modal-open': open}">
+    <div class="modal-box">
+    <div class="flex flex-col">
+        <ng-content />
+    <div class="flex w-full justify-between gap-4">
+        <button class="btn btn-primary w-1/2" (click)="onConfirm()">Confirm</button>
+        <button class="btn btn-neutral w-1/2" (click)="onDismiss()">Close</button>
+    </div>
+    </div>
+    </div>
+</dialog>
