@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MasterService } from '../../services/master.service';
-import { IChildDept, IParentDept } from '../../../api/types';
+import { IChildDept, IEmployeeData, IParentDept } from '../../../api/types';
 import {
   FormControl,
   FormGroup,
@@ -9,18 +9,29 @@ import {
 } from '@angular/forms';
 import { InputComponent } from '../../components/input/input.component';
 import { EmployeeService } from '../../services/employee.service';
+import { EmployeeStoreService } from '../../services/employeeStore.service';
+import { CommonModule, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-employee',
-  imports: [ReactiveFormsModule, InputComponent, InputComponent],
+  imports: [
+    ReactiveFormsModule,
+    InputComponent,
+    InputComponent,
+    CommonModule,
+    NgClass,
+  ],
   templateUrl: './employee.component.html',
 })
 export class EmployeeComponent implements OnInit {
   masterService = inject(MasterService);
   employeeService = inject(EmployeeService);
+  employeeStoreService = inject(EmployeeStoreService);
   parentDeptList: IParentDept[] = [];
   childDeptList: IChildDept[] = [];
   parentDeptSelected: undefined | string;
+  employees: IEmployeeData[] = [];
+  addSectionShown: boolean = false;
 
   employeeForm = new FormGroup({
     parentDept: new FormControl('', [Validators.required]),
@@ -33,6 +44,7 @@ export class EmployeeComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
     gender: new FormControl('', [Validators.required]),
   });
+  employees$ = this.employeeStoreService.getEmployees();
 
   ngOnInit(): void {
     this.getParentDeptList();
@@ -50,14 +62,13 @@ export class EmployeeComponent implements OnInit {
   onCreateEmployee() {
     const payload = {
       ...this.employeeForm.value,
+      emailId: this.employeeForm.value.email || '',
       deptId: this.employeeForm.value.childDept || '',
     };
+    delete payload.email;
     delete payload.parentDept;
     delete payload.childDept;
-    this.employeeService.createEmployee(payload).subscribe((res) => {
-      console.log('Employee created:', res);
-    });
-    console.log(this.employeeForm.value);
+    this.employeeStoreService.addEmployee(payload);
   }
 
   onParentDeptChange(value: string) {
@@ -68,8 +79,10 @@ export class EmployeeComponent implements OnInit {
       if (this.childDeptList.length) {
         this.employeeForm.get('childDept')?.enable();
       }
-
-      console.log('Child Dept list:', this.childDeptList);
     });
+  }
+
+  toggleAddSectionDisplay(value: boolean) {
+    this.addSectionShown = value;
   }
 }

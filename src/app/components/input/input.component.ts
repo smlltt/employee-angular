@@ -18,8 +18,4 @@ export class InputComponent {
   objectKeys(obj: any) {
     return Object.keys(obj);
   }
-
-  ngOnInit() {
-    console.log('InputComponent cintroi', this.control); // Now this will work correctly
-  }
 }

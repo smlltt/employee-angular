@@ -1,48 +1,84 @@
-<div class="grid grid-cols-3">
-<div class="col-span-2">employee table</div>
-<div >
-<form [formGroup]="employeeForm"  (ngSubmit)="onCreateEmployee()" class="flex flex-col">
-  <app-input  [control]="employeeForm.controls.employeeName" id="employeeName" label="Employee Name"></app-input>
-  <app-input  [control]="employeeForm.controls.contactNumber" id="contactNumber" label="Contact Number"></app-input>
-  <app-input  [control]="employeeForm.controls.email" id="email" label="Email"></app-input>
-  <!-- parent dept -->
-  <div class="flex flex-col py-2 gap-2">
-    <label for="parentDept" class="label-text">Parent Department</label> 
-<select id="parentDept" formControlName="parentDept" class="select select-primary w-full" >
-  @for (item of parentDeptList; track $index) {
-    <option value="{{item.departmentId}}">{{item.departmentName}}</option>
-  }
-   </select> 
-   </div>
-   <!-- child dept -->
-   <div class="flex flex-col py-2 gap-2">
-    <label for="childDept" class="label-text">Child Department</label> 
-<select id="childDept" formControlName="childDept" class="select select-primary w-full"  >
-  @for (item of childDeptList; track $index) {
-    <option value="{{item.childDeptId}}">{{item.departmentName}}</option>
-  }
-   </select> 
-   </div>
-   <app-input  [control]="employeeForm.controls.password" id="password" label="Password"></app-input>
-   <!-- gender radio buttons -->
-   <div class="flex flex-col py-2 gap-2">
-    <label class="label-text">Gender</label>
-    <div class="flex gap-4">
-      <label class="flex items-center gap-2">
-        <input type="radio" formControlName="gender" value="male" class="radio radio-primary">
-        Male
-      </label>
-      <label class="flex items-center gap-2">
-        <input type="radio" formControlName="gender" value="female" class="radio radio-primary">
-        Female
-      </label>
-      <label class="flex items-center gap-2">
-        <input type="radio" formControlName="gender" value="other" class="radio radio-primary">
-        Other
-      </label>
-    </div>
+<div class="grid grid-cols-3 gap-2">
+<div [ngClass]="addSectionShown ? 'col-span-2' : 'col-span-3'">
+  <div class="flex justify-between items-center bg-slate-900 p-3">
+  <h2 class="text-xl text-primary font-semibold" >Employees</h2>
+  <button class="btn btn-secondary" [ngClass]="addSectionShown ? 'hidden' : 'block'" (click)="toggleAddSectionDisplay(true)">Add new</button>
   </div>
-   <button class="btn btn-primary" [disabled]="!employeeForm.valid">Create Employee</button>
-</form>
+  <div class="overflow-x-auto">
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Dept</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (employee of (employees$ | async); track employee.emailId) {
+          <tr>
+            <th> {{ employee.employeeName }}</th>
+            <th> {{ employee.contactNo }}</th>
+            <th> {{ employee.emailId }}</th>
+            <th> {{ employee.deptId }}</th>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
 </div>
+@if (addSectionShown) {
+  <div class="flex flex-col bg-slate-900 p-3">
+    <div class="flex justify-between items-center">
+    <h2 class="text-xl text-primary font-semibold">Create Employee</h2>
+    <button class="btn btn-primary" (click)="toggleAddSectionDisplay(false)">Close</button>
+  </div>
+  <form [formGroup]="employeeForm"  (ngSubmit)="onCreateEmployee()" class="flex flex-col">
+    <app-input  [control]="employeeForm.controls.employeeName" id="employeeName" label="Employee Name"></app-input>
+    <app-input  [control]="employeeForm.controls.contactNumber" id="contactNumber" label="Contact Number"></app-input>
+    <app-input  [control]="employeeForm.controls.email" id="email" label="Email"></app-input>
+    <!-- parent dept -->
+    <div class="flex flex-col py-2 gap-2">
+      <label for="parentDept" class="label-text">Parent Department</label> 
+  <select id="parentDept" formControlName="parentDept" class="select select-primary w-full" >
+    @for (item of parentDeptList; track $index) {
+      <option value="{{item.departmentId}}">{{item.departmentName}}</option>
+    }
+     </select> 
+     </div>
+     <!-- child dept -->
+     <div class="flex flex-col py-2 gap-2">
+      <label for="childDept" class="label-text">Child Department</label> 
+  <select id="childDept" formControlName="childDept" class="select select-primary w-full"  >
+    @for (item of childDeptList; track $index) {
+      <option value="{{item.childDeptId}}">{{item.departmentName}}</option>
+    }
+     </select> 
+     </div>
+     <app-input  [control]="employeeForm.controls.password" id="password" label="Password"></app-input>
+     <!-- gender radio buttons -->
+     <div class="flex flex-col py-2 gap-2">
+      <label class="label-text">Gender</label>
+      <div class="flex gap-4">
+        <label class="flex items-center gap-2">
+          <input type="radio" formControlName="gender" value="male" class="radio radio-primary">
+          Male
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="radio" formControlName="gender" value="female" class="radio radio-primary">
+          Female
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="radio" formControlName="gender" value="other" class="radio radio-primary">
+          Other
+        </label>
+      </div>
+    </div>
+     <button class="btn btn-primary" [disabled]="!employeeForm.valid">Create Employee</button>
+  </form>
+  </div>
+}
+
 </div>
