@@ -5,6 +5,7 @@ import {
   createEmployee as createEmployeeEnpoint,
   deleteEmployeeUrl,
   employeesUrl,
+  updateEmployeeUrl,
 } from '../../api';
 
 @Injectable({
@@ -17,6 +18,12 @@ export class EmployeeService {
   }
   getEmployees() {
     return this.http.get<IEmployeeData[]>(employeesUrl);
+  }
+  editEmployee(
+    id: number,
+    employee: Omit<IEmployeeData, 'createdDate' | 'employeeId'>
+  ) {
+    return this.http.put<IEmployeeData>(updateEmployeeUrl(id), employee);
   }
   deleteEmployee(id: number) {
     return this.http.delete(deleteEmployeeUrl(id));

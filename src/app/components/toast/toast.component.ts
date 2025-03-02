@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ToastService, Toast } from '../../services/toast.service';
+import { Component, inject } from '@angular/core';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-toast',
@@ -7,13 +7,8 @@ import { ToastService, Toast } from '../../services/toast.service';
   styleUrls: ['./toast.component.css'],
 })
 export class ToastComponent {
-  toasts: Toast[] = [];
-
-  constructor(private toastService: ToastService) {
-    this.toastService.toasts$.subscribe((toasts) => {
-      this.toasts = toasts;
-    });
-  }
+  toastService = inject(ToastService);
+  toasts = this.toastService.toasts;
 
   removeToast(id: number) {
     this.toastService.removeToast(id);

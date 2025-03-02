@@ -1,5 +1,5 @@
 <div class="toast toast-end toast-bottom z-10">
-    @for(toast of toasts; track toast.type) {
+    @for(toast of toasts(); track toast.type) {
         <div class="alert {{ toast.type }}">
         <span>{{ toast.message }}</span>
         <button (click)="removeToast(toast.id)">&times;</button>
