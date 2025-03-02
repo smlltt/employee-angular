@@ -1,14 +1,14 @@
-<app-modal [open]="!!employeeToBeDeleted" (onConfirmEvent)="deleteEmployee()" (onDismissEvent)="setEmployeeToBeDeleted(undefined)">
+<app-modal [open]="!!employeeToBeDeleted()" (onConfirmEvent)="deleteEmployee()" (onDismissEvent)="setEmployeeToBeDeleted(undefined)">
 <div class="gap-2 flex flex-col pb-4">
-  <h2 class="text-2xl">Delete employee {{employeeToBeDeleted}}</h2>
+  <h2 class="text-2xl">Delete employee {{employeeToBeDeleted()}}</h2>
   <p>Are you sure you want to proceed?</p>
 </div>
 </app-modal>
 <div class="grid grid-cols-3 gap-2">
-<div [ngClass]="addSectionShown ? 'col-span-2' : 'col-span-3'">
+<div [ngClass]="addSectionShown() ? 'col-span-2' : 'col-span-3'">
   <div class="flex justify-between items-center bg-slate-900 p-3">
   <h2 class="text-xl text-primary font-semibold" >Employees</h2>
-  <button class="btn btn-secondary" [ngClass]="addSectionShown ? 'hidden' : 'block'" (click)="toggleAddSectionDisplay(true)">Add new</button>
+  <button class="btn btn-secondary" [ngClass]="addSectionShown() ? 'hidden' : 'block'" (click)="toggleAddSectionDisplay(true)">Add new</button>
   </div>
   <div class="overflow-x-auto">
     <table class="table">
@@ -31,7 +31,10 @@
             <th> {{ employee.contactNo }}</th>
             <th> {{ employee.emailId }}</th>
             <th> {{ employee.deptId }}</th>
-            <th> <button class="btn btn-error" (click)="setEmployeeToBeDeleted(employee.employeeId)">Delete</button></th>
+            <th class="flex gap-2"> 
+              <button class="btn btn-info" (click)="setEmployeeToBeEdited(employee)">Edit</button>
+              <button class="btn btn-error" (click)="setEmployeeToBeDeleted(employee.employeeId)">Delete</button>
+            </th>
           </tr>
         }
       </tbody>
@@ -39,13 +42,13 @@
   </div>
 
 </div>
-@if (addSectionShown) {
+@if (addSectionShown()) {
   <div class="flex flex-col bg-slate-900 p-3">
     <div class="flex justify-between items-center">
-    <h2 class="text-xl text-primary font-semibold">Create Employee</h2>
+    <h2 class="text-xl text-primary font-semibold">{{isEditingEmployeeId() ? 'Edit ' : 'Create '}}Employee</h2>
     <button class="btn btn-primary" (click)="toggleAddSectionDisplay(false)">Close</button>
   </div>
-  <form [formGroup]="employeeForm"  (ngSubmit)="onCreateEmployee()" class="flex flex-col">
+  <form [formGroup]="employeeForm"  (ngSubmit)="onFormSubmit()" class="flex flex-col">
     <app-input  [control]="employeeForm.controls.employeeName" id="employeeName" label="Employee Name"></app-input>
     <app-input  [control]="employeeForm.controls.contactNumber" id="contactNumber" label="Contact Number"></app-input>
     <app-input  [control]="employeeForm.controls.email" id="email" label="Email"></app-input>
@@ -86,7 +89,7 @@
         </label>
       </div>
     </div>
-     <button class="btn btn-primary" [disabled]="!employeeForm.valid">Create Employee</button>
+     <button class="btn btn-primary" [disabled]="!employeeForm.valid">{{isEditingEmployeeId() ? 'Edit ' : 'Create '}}Employee</button>
   </form>
   </div>
 }

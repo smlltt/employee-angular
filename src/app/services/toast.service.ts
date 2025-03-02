@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 export interface Toast {
   id: number;
@@ -12,30 +11,25 @@ export interface Toast {
   providedIn: 'root',
 })
 export class ToastService {
-  private toastsSubject = new BehaviorSubject<Toast[]>([]);
-  private toastIdCounter = 0;
-  toasts$ = this.toastsSubject.asObservable();
+  private toastIdCounter = signal(0);
+  private toastsSignal = signal<Toast[]>([]);
 
-  constructor() {}
+  get toasts() {
+    return this.toastsSignal;
+  }
 
-  show(toast: Omit<Toast, 'id'>) {
+  addToast(toast: Omit<Toast, 'id'>) {
+    this.toastIdCounter.set(this.toastIdCounter() + 1);
     const newToast: Toast = {
-      id: this.toastIdCounter++, // Assign a unique ID
+      id: this.toastIdCounter(),
       ...toast,
     };
 
-    const toasts = this.toastsSubject.getValue();
-    this.toastsSubject.next([...toasts, newToast]);
-
+    this.toastsSignal.set([...this.toastsSignal(), { ...newToast }]);
     setTimeout(() => this.removeToast(newToast.id), newToast.duration || 2000);
   }
 
   removeToast(id: number) {
-    const toasts = this.toastsSubject.getValue();
-    this.toastsSubject.next(toasts.filter((t) => t.id !== id));
-  }
-
-  clear() {
-    this.toastsSubject.next([]);
+    this.toastsSignal.set(this.toastsSignal().filter((t) => t.id !== id));
   }
 }

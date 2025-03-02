@@ -30,14 +30,37 @@ export class EmployeeStoreService {
     this.employeeService.createEmployee(employee).subscribe({
       next: () => {
         this.fetchEmployees();
-        this.toastService.show({
+        this.toastService.addToast({
           message: 'Employee added successfully',
           type: 'alert-success',
         });
         onSuccess?.();
       },
       error: () => {
-        this.toastService.show({
+        this.toastService.addToast({
+          message: 'Failed to add employee',
+          type: 'alert-error',
+        });
+      },
+    });
+  }
+
+  editEmployee(
+    id: number,
+    employee: Omit<IEmployeeData, 'createdDate' | 'employeeId'>,
+    onSuccess?: () => void
+  ) {
+    this.employeeService.editEmployee(id, employee).subscribe({
+      next: () => {
+        this.fetchEmployees();
+        this.toastService.addToast({
+          message: 'Employee added successfully',
+          type: 'alert-success',
+        });
+        onSuccess?.();
+      },
+      error: () => {
+        this.toastService.addToast({
           message: 'Failed to add employee',
           type: 'alert-error',
         });
@@ -49,14 +72,14 @@ export class EmployeeStoreService {
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
         this.fetchEmployees();
-        this.toastService.show({
+        this.toastService.addToast({
           message: 'Employee removed successfully',
           type: 'alert-success',
         });
         onSuccess?.();
       },
       error: () => {
-        this.toastService.show({
+        this.toastService.addToast({
           message: 'Failed to remove employee',
           type: 'alert-error',
         });
